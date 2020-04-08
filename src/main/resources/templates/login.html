@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎来到用户登录</title>
+</head>
+<body style="background-image: url(./photo/back.jpg);background-repeat:no-repeat;background-attachment: fixed;background-size:cover;">
+<link rel="stylesheet" href="./layui/css/layui.css" media="all">
+<div>
+    <ul class="layui-nav layui-bg-blue">
+        <li class="layui-nav-item layui-this"><a href="/home">梁真豪的网站</a></li>
+        <li class="layui-nav-item"><a href="/upload">我的图库</a></li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">联系我</a>
+            <span class="layui-badge-dot"></span>
+            <dl class="layui-nav-child">
+                <dd><a href="">QQ</a></dd>
+                <dd><a href="">微信</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item" style="float: right">
+            <button class="layui-btn" lay-active="e1">登录</button>
+        </li>
+        <li class="layui-nav-item" style="float: right;margin-right: 10px">
+            <button class="layui-btn" lay-active="e2">注册</button>
+        </li>
+    </ul>
+</div>
+<div style="float:left;background-color:#93D1FF;width:15%;height:887px;position:absolute;opacity:0.2;">
+
+</div>
+<div style="float:right;background-color:#93D1FF;width:15%;height:887px;opacity:0.2;">
+
+</div>
+<div style="text-align:center;margin-top:1%;position:absolute;width:100%;">
+    <form class="layui-form" style="text-align: center">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">电话</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="userTel" placeholder="请输入账号" lay-verify="required|phone"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                    <input type="password" name="userPassword" required lay-verify="required" placeholder="请输入密码"
+                           autocomplete="off" class="layui-input" maxLength="16"
+                           onKeypress="javascript:if(event.keyCode == 32)event.returnValue = false;">
+                </div>
+            </div>
+
+
+            <div class="layui-inline">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="submit">立即登录</button>
+                </div>
+            </div>
+
+    </form>
+</div>
+<script src="./layui/layui.js" charset="utf-8"></script>
+<script>
+    var LoginMsg = '[[${msg}]]';
+
+    layui.use(['form', 'jquery', 'layer', 'util'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.jquery,
+            util = layui.util;
+        if (LoginMsg != '') {
+            layer.alert(LoginMsg);
+        }
+        layui.use('element', function () {
+            var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+            //监听导航点击
+            element.on('nav(demo)', function (elem) {
+
+                layer.msg(elem.text());
+            });
+        });
+        //注册登录按钮事件
+        util.event('lay-active', {
+            e1: function () {
+
+                window.location.href = '/login';
+            }
+            , e2: function () {
+                window.location.href = '/registered';
+            }
+        });
+        //form表单监听提交
+        form.on('submit(submit)', function (data) {
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data: data.field,
+                url: "/login",
+                success: function (result) {
+                    if (result.code === 200) {
+                        window.location.href = '/home';
+                    } else {
+                        layer.alert("登录失败")
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

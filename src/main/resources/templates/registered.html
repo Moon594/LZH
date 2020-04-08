@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎来到用户注册</title>
+</head>
+<body style="background-image: url(./photo/back.jpg);background-repeat:no-repeat;background-attachment: fixed;background-size:cover;">
+<link rel="stylesheet" href="./layui/css/layui.css" media="all">
+<div>
+    <ul class="layui-nav layui-bg-blue">
+        <li class="layui-nav-item"><a href="">梁真豪的网站</a></li>
+        <li class="layui-nav-item"><a href="/upload">我的图库</a></li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">联系我</a>
+            <span class="layui-badge-dot"></span>
+            <dl class="layui-nav-child">
+                <dd><a href="">QQ</a></dd>
+                <dd><a href="">微信</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item" style="float: right">
+            <button class="layui-btn" lay-active="e1">登录</button>
+        </li>
+        <li class="layui-nav-item" style="float: right;margin-right: 10px">
+            <button class="layui-btn" lay-active="e2">注册</button>
+        </li>
+    </ul>
+</div>
+
+<!--注册表单-->
+<div style="text-align: center;margin-top: 10%">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-upload">
+                <div class="layui-upload-list">
+                    <img class="layui-upload-img" id="imgSee" width="100px" height="100px">
+                    <p id="demoText"></p>
+                    <button type="button" class="layui-btn" id="photo-upload" style="margin-top: 10px">上传头像</button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">昵称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="userName" maxLength="8" required lay-verify="required" placeholder="请输入昵称"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">电话</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="userTel" placeholder="请输入电话号码" lay-verify="required|phone"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                    <input type="password" name="userPassword" required lay-verify="required" placeholder="请输入密码"
+                           autocomplete="off" class="layui-input" maxLength="16"
+                           onKeypress="javascript:if(event.keyCode == 32)event.returnValue = false;">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">年龄</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="userAge" maxLength="2" required lay-verify="required|number"
+                           placeholder="请输入年龄" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="userSex" value="男" title="男">
+                    <input type="radio" name="userSex" value="女" title="女" checked>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="submit">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="./layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'jquery','util','upload','layer'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.jquery,
+            util=layui.util,
+            upload=layui.upload;
+        var images;
+        var uploadInst = upload.render({
+            elem: '#photo-upload'
+            ,url: 'http://localhost:8080/upload' //改成您自己的上传接口
+            ,accept: 'images' //只允许上传图片
+            ,size: 1024*5 //限定大小
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#imgSee').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                var data = res.data;
+                images=data[0].photoPath;
+                $("#name").val("想要赋予的值");
+                //如果上传失败
+                if(res.code>200){
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                return layer.msg('上传成功')
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+        //注册登录按钮事件
+        util.event('lay-active', {
+            e1: function(){
+
+                window.location.href = '/login';
+            }
+            ,e2: function(){
+                window.location.href = '/registered';
+            }
+        });
+        //form表单监听提交
+        form.on('submit(submit)', function (data) {
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                data: data.field,
+                url: "/registered?userPhoto="+images,
+                success: function (result) {
+                    if (result.code===200) {
+                            //配置一个透明的询问框
+                            layer.msg('恭喜,注册成功!', {
+                                time: 20000, //20s后自动关闭
+                                btn: ['现在去登录']
+                                ,yes: function(){
+                                    window.location.href = '/login';
+                                }
+                            });
+                        //
+                    } else {
+                        layer.msg("手机号码已存在");
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

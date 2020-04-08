@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎进入梁真豪的网站</title>
+</head>
+<body style="background-image: url(./photo/back.jpg);background-repeat:no-repeat;background-attachment: fixed;background-size:cover;">
+<link rel="stylesheet" href="./layui/css/layui.css" media="all">
+<div>
+    <ul class="layui-nav layui-bg-blue">
+        <li class="layui-nav-item"><a href="/home">梁真豪的网站</a></li>
+        <li class="layui-nav-item"><a href="/upload">我的图库</a></li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">联系我</a>
+            <span class="layui-badge-dot"></span>
+            <dl class="layui-nav-child">
+                <dd><a href="">QQ</a></dd>
+                <dd><a href="">微信</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item" lay-unselect="" style="float: right">
+            <a href="javascript:;"><img th:src="'http://www.lzhmoon.top:8888/'+${user.getUserPhoto()}" class="layui-nav-img">我</a>
+            <dl class="layui-nav-child">
+                <dd><a href="javascript:;">修改信息</a></dd>
+                <dd><a href="javascript:;">修改密码</a></dd>
+                <dd><a href="/logout">退出</a></dd>
+            </dl>
+        </li>
+    </ul>
+</div>
+<script src="./layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'jquery','layer','util'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.jquery;
+
+        layui.use('element', function(){
+            var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+            //监听导航点击
+            element.on('nav(demo)', function(elem){
+                //console.log(elem)
+                layer.msg(elem.text());
+            });
+        });
+    });
+</script>
+</body>
+</html>

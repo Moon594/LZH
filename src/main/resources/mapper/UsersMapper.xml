@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lzh.moon.mapper.UsersMapper">
+  <resultMap id="BaseResultMap" type="com.lzh.moon.Vo.Users">
+    <!--@mbg.generated-->
+    <!--@Table users-->
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_tel" jdbcType="VARCHAR" property="userTel" />
+    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="user_sex" jdbcType="VARCHAR" property="userSex" />
+    <result column="user_age" jdbcType="INTEGER" property="userAge" />
+    <result column="user_photo" jdbcType="VARCHAR" property="userPhoto" />
+    <result column="user_sign" jdbcType="VARCHAR" property="userSign" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    user_id, user_name, user_tel, user_password, user_sex, user_age, user_photo, user_sign
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from users
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from users
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="user_id" keyProperty="userId" parameterType="com.lzh.moon.Vo.Users" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into users (user_name, user_tel, user_password,
+      user_sex, user_age, user_photo,
+      user_sign)
+    values (#{userName,jdbcType=VARCHAR}, #{userTel,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR},
+      #{userSex,jdbcType=VARCHAR}, #{userAge,jdbcType=INTEGER}, #{userPhoto,jdbcType=VARCHAR},
+      #{userSign,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="user_id" keyProperty="userId" parameterType="com.lzh.moon.Vo.Users" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into users
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userTel != null">
+        user_tel,
+      </if>
+      <if test="userPassword != null">
+        user_password,
+      </if>
+      <if test="userSex != null">
+        user_sex,
+      </if>
+      <if test="userAge != null">
+        user_age,
+      </if>
+      <if test="userPhoto != null">
+        user_photo,
+      </if>
+      <if test="userSign != null">
+        user_sign,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userTel != null">
+        #{userTel,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null">
+        #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null">
+        #{userSex,jdbcType=VARCHAR},
+      </if>
+      <if test="userAge != null">
+        #{userAge,jdbcType=INTEGER},
+      </if>
+      <if test="userPhoto != null">
+        #{userPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="userSign != null">
+        #{userSign,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lzh.moon.Vo.Users">
+    <!--@mbg.generated-->
+    update users
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userTel != null">
+        user_tel = #{userTel,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null">
+        user_password = #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null">
+        user_sex = #{userSex,jdbcType=VARCHAR},
+      </if>
+      <if test="userAge != null">
+        user_age = #{userAge,jdbcType=INTEGER},
+      </if>
+      <if test="userPhoto != null">
+        user_photo = #{userPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="userSign != null">
+        user_sign = #{userSign,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lzh.moon.Vo.Users">
+    <!--@mbg.generated-->
+    update users
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_tel = #{userTel,jdbcType=VARCHAR},
+      user_password = #{userPassword,jdbcType=VARCHAR},
+      user_sex = #{userSex,jdbcType=VARCHAR},
+      user_age = #{userAge,jdbcType=INTEGER},
+      user_photo = #{userPhoto,jdbcType=VARCHAR},
+      user_sign = #{userSign,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+    <select id="selectByUserTelAndUserPassword" resultMap="BaseResultMap">
+      select
+      *
+      from users
+      where user_tel = #{userTel,jdbcType=VARCHAR}
+      and user_password = #{userPassword,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByUserTel" resultMap="BaseResultMap">
+      select * from users where user_tel = #{userTel,jdbcType=VARCHAR}
+    </select>
+</mapper>
