@@ -1,4 +1,4 @@
-package com.lzh.moon.Config.sms;
+package com.lzh.moon.utils;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
@@ -7,14 +7,14 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-import com.lzh.moon.Config.properties.ApplicationConfig;
+import com.lzh.moon.Config.AliMsgConfig;
 import com.lzh.moon.constant.ALiYunConstants;
 /**
  * 发送短信
  *
  * @author GideonYeung
  */
-public class ALiYunConfig {
+public class AliSmsUtil {
     /* 短信发送 */
     public static SendSmsResponse sendSms(String phone,String code) throws ClientException {
 
@@ -23,7 +23,7 @@ public class ALiYunConfig {
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
         /* 初始化acsClient,暂不支持region化 */
-        IClientProfile profile = DefaultProfile.getProfile(ALiYunConstants.REGIONLD, ApplicationConfig.getAccessKeyId(), ApplicationConfig.getAccessKeySecret());
+        IClientProfile profile = DefaultProfile.getProfile(ALiYunConstants.REGIONLD, AliMsgConfig.getAccessKeyId(), AliMsgConfig.getAccessKeySecret());
         DefaultProfile.addEndpoint(ALiYunConstants.REGIONLD, ALiYunConstants.REGIONLD, ALiYunConstants.PRODUCT, ALiYunConstants.DOMAIN);
         IAcsClient acsClient = new DefaultAcsClient(profile);
 
@@ -32,9 +32,9 @@ public class ALiYunConfig {
         /* 必填:待发送手机号 */
         request.setPhoneNumbers(phone);
         /* 必填:短信签名-可在短信控制台中找到 */
-        request.setSignName(ApplicationConfig.getSignName());
+        request.setSignName(AliMsgConfig.getSignName());
         /* 必填:短信模板code-可在短信控制台中找到 */
-        request.setTemplateCode(ApplicationConfig.getTemplateCode());
+        request.setTemplateCode(AliMsgConfig.getTemplateCode());
         /* 可选:模板中的变量替换JSON串,如模板内容为"亲爱的用户,您的验证码为${code}"时,此处的值为 */
         request.setTemplateParam("{\"code\":\"" + code + "\"}");
 

@@ -1,15 +1,15 @@
-package com.lzh.moon.Config.properties;
+package com.lzh.moon.Config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * 获取配置文件
  *
  * @author GideonYeung
  */
-@Component
-public class ApplicationConfig {
+@Configuration
+public class AliMsgConfig {
 
     private static String signName;
     private static String templateCode;

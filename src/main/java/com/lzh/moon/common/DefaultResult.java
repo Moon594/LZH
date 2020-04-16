@@ -14,4 +14,7 @@ public class DefaultResult extends AbstractResult {
     public DefaultResult(ResultCode resultCode) {
         super(resultCode.getCode(), resultCode.getMessage());
     }
+    public DefaultResult(int code,String message) {
+        super(code,message);
+    }
 }

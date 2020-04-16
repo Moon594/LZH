@@ -28,7 +28,7 @@
 </div>
 
 <!--注册表单-->
-<div style="text-align: center;margin-top: 10%">
+<div style="text-align: center;margin-top: 7%">
     <form class="layui-form">
         <div class="layui-form-item">
             <div class="layui-upload">
@@ -52,8 +52,22 @@
             <div class="layui-inline">
                 <label class="layui-form-label">电话</label>
                 <div class="layui-input-inline">
-                    <input type="tel" name="userTel" placeholder="请输入电话号码" lay-verify="required|phone"
+                    <input type="tel" name="userTel" id="userTel" placeholder="请输入电话号码" lay-verify="phone"
                            autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline" style="margin-left:120px">
+                <label class="layui-form-label">验证码</label>
+                <div class="layui-input-inline" style="width:110px">
+                    <input type="text" style="width:110px" name="code" id="code" lay-verify="number"
+                           placeholder="请输入验证码"
+                           autocomplete="off" class="layui-input" maxLength="6">
+                </div>
+                <div class="layui-input-inline">
+                    <input type="button" name="msgBtn" value="获取验证码" id="msgBtn" class="layui-btn layui-btn-radius"
+                           style="margin-right:100px">
                 </div>
             </div>
         </div>
@@ -71,7 +85,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">年龄</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="userAge" maxLength="2" required lay-verify="required|number"
+                    <input type="text" name="userAge" maxLength="2" required lay-verify="number"
                            placeholder="请输入年龄" autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -98,80 +112,135 @@
 
 <script src="./layui/layui.js" charset="utf-8"></script>
 <script>
-    layui.use(['form', 'jquery','util','upload','layer'], function () {
+    layui.use(['form', 'jquery', 'util', 'upload', 'layer'], function () {
         var form = layui.form,
             layer = layui.layer,
             $ = layui.jquery,
-            util=layui.util,
-            upload=layui.upload;
+            util = layui.util,
+            upload = layui.upload;
+        var time = 60;
+        var btn = $("#msgBtn");
+        $(document).on('click', "#msgBtn", function () {
+            var userTel = document.getElementById("userTel").value;
+            $.ajax({
+                type: "POST",
+                url: "/sendCode",
+                dataType: "json",
+                data: "userTel=" + userTel,
+                success: function (result) {
+                    if (result.code === 200) {
+                        layer.msg(result.msg + ",2分钟内有效!");
+                    }
+                    if (result.code === 301) {
+                        layer.msg(result.msg);
+                    }
+                    if (result.code === 302) {
+                        layer.msg(result.msg);
+                    }
+                    if (result.code === 500) {
+                        layer.msg(result.msg);
+                    }
+                }
+            });
+            $(this).attr("disabled", true);
+            timeCount();
+        });
+
+        function timeCount() {
+            time -= 1;
+            if (time > 0) {
+                btn.val(time + " 秒后重发");
+                setTimeout(timeCount, 1000)
+            } else {
+                btn.val("重新发送");
+                time = 60;   //重置等待时间
+                btn.removeAttr("disabled");
+            }
+        }
+
+        //图片上传
         var images;
         var uploadInst = upload.render({
             elem: '#photo-upload'
-            ,url: 'http://localhost:8080/upload' //改成您自己的上传接口
-            ,accept: 'images' //只允许上传图片
-            ,size: 1024*5 //限定大小
-            ,before: function(obj){
+            , url: 'http://localhost:8080/upload' //改成您自己的上传接口
+            , accept: 'images' //只允许上传图片
+            , size: 1024 * 5 //限定大小
+            , before: function (obj) {
                 //预读本地文件示例，不支持ie8
-                obj.preview(function(index, file, result){
+                obj.preview(function (index, file, result) {
                     $('#imgSee').attr('src', result); //图片链接（base64）
                 });
             }
-            ,done: function(res){
+            , done: function (res) {
                 var data = res.data;
-                images=data[0].photoPath;
+                images = data[0].photoPath;
                 $("#name").val("想要赋予的值");
                 //如果上传失败
-                if(res.code>200){
+                if (res.code > 200) {
                     return layer.msg('上传失败');
                 }
                 //上传成功
                 return layer.msg('上传成功')
             }
-            ,error: function(){
+            , error: function () {
                 //演示失败状态，并实现重传
                 var demoText = $('#demoText');
                 demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-                demoText.find('.demo-reload').on('click', function(){
+                demoText.find('.demo-reload').on('click', function () {
                     uploadInst.upload();
                 });
             }
         });
         //注册登录按钮事件
         util.event('lay-active', {
-            e1: function(){
+            e1: function () {
 
                 window.location.href = '/login';
             }
-            ,e2: function(){
+            , e2: function () {
                 window.location.href = '/registered';
             }
         });
         //form表单监听提交
         form.on('submit(submit)', function (data) {
+            var code = $('#code').val();
+            if (images === undefined) {
+                layer.msg("请上传头像")
+            }
+            if (code.length !== 6) {
+                layer.msg("请输入6位验证码")
+            }
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
                 data: data.field,
-                url: "/registered?userPhoto="+images,
+                url: "/registered?userPhoto=" + images + "?code=" + code,
                 success: function (result) {
-                    if (result.code===200) {
-                            //配置一个透明的询问框
-                            layer.msg('恭喜,注册成功!', {
-                                time: 20000, //20s后自动关闭
-                                btn: ['现在去登录']
-                                ,yes: function(){
-                                    window.location.href = '/login';
-                                }
-                            });
-                        //
-                    } else {
-                        layer.msg("手机号码已存在");
+                    if (result.code === 200) {
+                        //配置一个透明的询问框
+                        layer.msg('恭喜,注册成功!', {
+                            time: 20000, //20s后自动关闭
+                            btn: ['现在去登录']
+                            , yes: function () {
+                                window.location.href = '/login';
+                            }
+                        });
+                    }
+                    if (result.code === 302) {
+                        layer.msg(result.message);
+                    }
+                    if (result.code === 301) {
+                        layer.msg(result.message)
+                    }
+                    if (result.code === 201) {
+                        layer.msg(result.message)
                     }
                 }
             });
             return false;
         });
-    });
+    })
+    ;
 </script>
 </body>
 </html>

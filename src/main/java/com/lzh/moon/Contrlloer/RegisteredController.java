@@ -5,6 +5,7 @@ import com.lzh.moon.common.DefaultResult;
 import com.lzh.moon.common.DefaultResultData;
 import com.lzh.moon.service.RegisteredService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +36,10 @@ public class RegisteredController {
 
     @PostMapping("/registered")
     @ResponseBody
-    public DefaultResult registered(Users user){
-        return registeredService.insertUser(user);
+    public DefaultResult registered(Users user, @Param("code")String code){
+        DefaultResult defaultResult = registeredService.insertUser(user, code);
+        System.out.println(defaultResult.getCode());
+        System.out.println(defaultResult.getMessage());
+        return defaultResult;
     }
 }

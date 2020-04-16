@@ -22,7 +22,7 @@ import java.util.List;
  */
 
 @Component
-public class UploadFileUtils {
+public class UploadFileUtil {
 
 
     public List uploadFile(MultipartFile[] files,FastFileStorageClient fast) throws IOException {

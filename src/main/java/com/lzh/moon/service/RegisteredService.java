@@ -11,5 +11,5 @@ import com.lzh.moon.common.DefaultResult;
  * @date 2020/3/21 15:34
  */
 public interface RegisteredService {
-    DefaultResult insertUser(Users user);
+    DefaultResult insertUser(Users user,String code);
 }

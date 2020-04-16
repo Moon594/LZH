@@ -1,11 +1,8 @@
 package com.lzh.moon.Contrlloer;
-import com.github.tobato.fastdfs.domain.fdfs.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
-import com.lzh.moon.Vo.Photo;
 import com.lzh.moon.Vo.Users;
 import com.lzh.moon.common.DefaultResultData;
-import com.lzh.moon.common.ResultCode;
-import com.lzh.moon.utils.UploadFileUtils;
+import com.lzh.moon.utils.UploadFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 文件上传
@@ -29,7 +24,7 @@ public class FileUploadController {
     @Autowired
     private FastFileStorageClient fast;
     @Autowired
-    private UploadFileUtils util;
+    private UploadFileUtil util;
 
     @GetMapping("/upload")
     public String upload(HttpSession session, Model model){
