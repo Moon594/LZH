@@ -162,7 +162,8 @@
         var images;
         var uploadInst = upload.render({
             elem: '#photo-upload'
-            , url: 'http://localhost:8080/upload' //改成您自己的上传接口
+            ,type:'post'
+            , url: '/upload' //改成您自己的上传接口
             , accept: 'images' //只允许上传图片
             , size: 1024 * 5 //限定大小
             , before: function (obj) {
