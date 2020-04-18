@@ -130,6 +130,8 @@
                 success: function (result) {
                     if (result.code === 200) {
                         layer.msg(result.msg + ",2分钟内有效!");
+                        $(this).attr("disabled", true);
+                        timeCount();//成功发送短信后 按钮开始计时
                     }
                     if (result.code === 301) {
                         layer.msg(result.msg);
@@ -137,29 +139,28 @@
                     if (result.code === 302) {
                         layer.msg(result.msg);
                     }
+
                     if (result.code === 500) {
                         layer.msg(result.msg);
                     }
                 }
             });
-            $(this).attr("disabled", true);
-            timeCount();
         });
 
         function timeCount() {
             time -= 1;
             if (time > 0) {
-                btn.val(time + " 秒后重发");
-                setTimeout(timeCount, 1000)
+                btn.val(time + " 秒后重发");//设置btn按钮显示的值
+                setTimeout(timeCount, 1000)//一秒后再执行递归函数
             } else {
                 btn.val("重新发送");
                 time = 60;   //重置等待时间
-                btn.removeAttr("disabled");
+                btn.removeAttr("disabled");//删除按钮不可点击状态
             }
         }
 
         //图片上传
-        var images;
+        var images; //初始化一个存储图片地址的变量
         var uploadInst = upload.render({
             elem: '#photo-upload'
             ,type:'post'
@@ -174,7 +175,7 @@
             }
             , done: function (res) {
                 var data = res.data;
-                images = data[0].photoPath;
+                images = data[0].photoPath; //把服务器传回来的图片地址赋值给定义好的变量
                 $("#name").val("想要赋予的值");
                 //如果上传失败
                 if (res.code > 200) {
