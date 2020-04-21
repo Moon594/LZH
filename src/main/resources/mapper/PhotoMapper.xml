@@ -27,9 +27,9 @@
   </delete>
   <insert id="insert" parameterType="com.lzh.moon.Vo.Photo">
     <!--@mbg.generated-->
-    insert into photo (photo_id, user_id, photo_path, 
+    insert into photo (user_id, photo_path,
       photo_group)
-    values (#{photoId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{photoPath,jdbcType=VARCHAR}, 
+    values (#{userId,jdbcType=INTEGER}, #{photoPath,jdbcType=VARCHAR},
       #{photoGroup,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lzh.moon.Vo.Photo">

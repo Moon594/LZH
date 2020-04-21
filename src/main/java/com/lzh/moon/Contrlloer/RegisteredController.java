@@ -38,8 +38,9 @@ public class RegisteredController {
     @ResponseBody
     public DefaultResult registered(Users user, @Param("code")String code){
         DefaultResult defaultResult = registeredService.insertUser(user, code);
+
         System.out.println(defaultResult.getCode());
-        System.out.println(defaultResult.getMessage());
+        System.out.println( defaultResult.getMessage());
         return defaultResult;
     }
 }
